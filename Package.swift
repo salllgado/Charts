@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "DGCharts",
+    name: "Charts",
     platforms: [
           .iOS(.v12),
           .tvOS(.v12),
@@ -11,17 +11,20 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "DGCharts",
-            targets: ["DGCharts"]),
+            name: "Charts",
+            targets: ["Charts"]),
         .library(
-            name: "DGChartsDynamic",
+            name: "ChartsDynamic",
             type: .dynamic,
-            targets: ["DGCharts"])
+            targets: ["Charts"])
+    ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0")
     ],
     targets: [
         .target(
-            name: "DGCharts",
-            path: "Source/Charts"
+            name: "Charts",
+            dependencies: [.product(name: "Algorithms", package: "swift-algorithms")]
         )
     ],
     swiftLanguageVersions: [.v5]

@@ -12,13 +12,6 @@
 import Foundation
 import CoreGraphics
 
-#if canImport(UIKit)
-import UIKit
-#endif
-
-#if canImport(AppKit)
-import AppKit
-#endif
 
 /// The limit line is an additional feature for all Line, Bar and ScatterCharts.
 /// It allows the displaying of an additional line in the chart that marks a certain maximum / limit on the specified axis (x- or y-axis).
