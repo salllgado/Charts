@@ -3,26 +3,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "DGCharts",
+    name: "Charts",
     platforms: [
-          .iOS(.v12),
-          .tvOS(.v12),
-          .macOS(.v10_12),
+          .iOS(.v9),
+          .tvOS(.v9),
+          .macOS(.v10_11),
     ],
     products: [
         .library(
-            name: "DGCharts",
-            targets: ["DGCharts"]),
-        .library(
-            name: "DGChartsDynamic",
-            type: .dynamic,
-            targets: ["DGCharts"])
+            name: "Charts",
+            targets: ["Charts"]),
     ],
     targets: [
-        .target(
-            name: "DGCharts",
-            path: "Source/Charts"
-        )
+        .target(name: "Charts")
     ],
     swiftLanguageVersions: [.v5]
 )

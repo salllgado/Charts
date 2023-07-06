@@ -9,7 +9,7 @@
 #if canImport(UIKit)
     import UIKit
 #endif
-import DGCharts
+import Charts
 
 class NegativeStackedBarChartViewController: DemoBaseViewController {
 
@@ -45,7 +45,7 @@ class NegativeStackedBarChartViewController: DemoBaseViewController {
 
         chartView.delegate = self
         
-        chartView.chartDescription.enabled = false
+        chartView.chartDescription?.enabled = false
         
         chartView.drawBarShadowEnabled = false
         chartView.drawValueAboveBarEnabled = true
@@ -127,7 +127,7 @@ class NegativeStackedBarChartViewController: DemoBaseViewController {
     }
 }
 
-extension NegativeStackedBarChartViewController: AxisValueFormatter {
+extension NegativeStackedBarChartViewController: IAxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         return String(format: "%03.0f-%03.0f", value, value + 10)
     }

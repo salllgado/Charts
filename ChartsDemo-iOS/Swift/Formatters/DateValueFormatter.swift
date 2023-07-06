@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import DGCharts
+import Charts
 
-public class DateValueFormatter: NSObject, AxisValueFormatter {
+public class DateValueFormatter: NSObject, IAxisValueFormatter {
     private let dateFormatter = DateFormatter()
     
     override init() {

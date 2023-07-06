@@ -9,13 +9,16 @@
 #if canImport(UIKit)
     import UIKit
 #endif
-import DGCharts
+import Charts
 
 class RadarChartViewController: DemoBaseViewController {
 
     @IBOutlet var chartView: RadarChartView!
     
     let activities = ["Burger", "Steak", "Salad", "Pasta", "Pizza"]
+    var originalBarBgColor: UIColor!
+    var originalBarTintColor: UIColor!
+    var originalBarStyle: UIBarStyle!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +41,7 @@ class RadarChartViewController: DemoBaseViewController {
         
         chartView.delegate = self
         
-        chartView.chartDescription.enabled = false
+        chartView.chartDescription?.enabled = false
         chartView.webLineWidth = 1
         chartView.innerWebLineWidth = 1
         chartView.webColor = .lightGray
@@ -79,6 +82,32 @@ class RadarChartViewController: DemoBaseViewController {
         chartView.animate(xAxisDuration: 1.4, yAxisDuration: 1.4, easingOption: .easeOutBack)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIView.animate(withDuration: 0.15) {
+            let navBar = self.navigationController!.navigationBar
+            self.originalBarBgColor = navBar.barTintColor
+            self.originalBarTintColor = navBar.tintColor
+            self.originalBarStyle = navBar.barStyle
+
+            navBar.barTintColor = self.view.backgroundColor
+            navBar.tintColor = .white
+            navBar.barStyle = .black
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        UIView.animate(withDuration: 0.15) {
+            let navBar = self.navigationController!.navigationBar
+            navBar.barTintColor = self.originalBarBgColor
+            navBar.tintColor = self.originalBarTintColor
+            navBar.barStyle = self.originalBarStyle
+        }
+    }
+    
     override func updateChartData() {
         if self.shouldHideData {
             chartView.data = nil
@@ -115,7 +144,7 @@ class RadarChartViewController: DemoBaseViewController {
         set2.drawHighlightCircleEnabled = true
         set2.setDrawHighlightIndicators(false)
         
-        let data: RadarChartData = [set1, set2]
+        let data = RadarChartData(dataSets: [set1, set2])
         data.setValueFont(.systemFont(ofSize: 8, weight: .light))
         data.setDrawValues(false)
         data.setValueTextColor(.white)
@@ -124,8 +153,6 @@ class RadarChartViewController: DemoBaseViewController {
     }
     
     override func optionTapped(_ option: Option) {
-        guard let data = chartView.data else { return }
-
         switch option {
         case .toggleXLabels:
             chartView.xAxis.drawLabelsEnabled = !chartView.xAxis.drawLabelsEnabled
@@ -141,14 +168,14 @@ class RadarChartViewController: DemoBaseViewController {
             chartView.rotationEnabled = !chartView.rotationEnabled
             
         case .toggleFilled:
-            for case let set as RadarChartDataSet in data {
+            for set in chartView.data!.dataSets as! [RadarChartDataSet] {
                 set.drawFilledEnabled = !set.drawFilledEnabled
             }
             
             chartView.setNeedsDisplay()
             
         case .toggleHighlightCircle:
-            for case let set as RadarChartDataSet in data {
+            for set in chartView.data!.dataSets as! [RadarChartDataSet] {
                 set.drawHighlightCircleEnabled = !set.drawHighlightCircleEnabled
             }
             chartView.setNeedsDisplay()
@@ -171,7 +198,7 @@ class RadarChartViewController: DemoBaseViewController {
     }
 }
 
-extension RadarChartViewController: AxisValueFormatter {
+extension RadarChartViewController: IAxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         return activities[Int(value) % activities.count]
     }
